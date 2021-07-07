@@ -50,6 +50,7 @@ textarea {
     background-color: #d41d50;
     color:white;
     width:60px;
+    border-radius:8px;
 }
 
 .course > li .details {

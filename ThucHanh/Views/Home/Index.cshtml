@@ -26,7 +26,7 @@
             <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
         </div>*@
     <ul class="course">
-        @*@foreach (var course in Model)
+        @foreach (var course in Model)
         {
             <li>
                 <div class="date">
@@ -44,16 +44,34 @@
                     <span class="category">
                         @course.Category.Name
                     </span>
+                    @*<span>
+                            <button data-course-id="@course.Id" class ="btn btn-default btn-sm js-toggle-attendance" >Going</button>
+                        </span>*@
                 </div>
             </li>
-        }*@
-        @foreach (var course in Model)
-        {
-            <li>
-                @course.datetime - @course.Lecture.Name
-            </li>
         }
+
     </ul>
 </div>
 
 <script src="~/Content/Site.css"></script>
+
+@*@section scripts
+<script>
+    $(document).ready(function () {
+        $(".js-toggle-attendance").click(function (e) {
+            var button = $(e.target);
+            $.post("/api/Attendances", { courseId: button.attr("data-course-id") })
+                .done(function () {
+                    button-
+                        .removeClass("btn-default")
+                        .addClass("btn-info")
+                        .text("Going")
+                })
+                .fail(function () {
+                    alert("Sthing Failed");
+                })
+
+        });
+    });
+</script>*@

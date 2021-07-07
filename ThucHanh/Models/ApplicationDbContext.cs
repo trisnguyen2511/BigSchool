@@ -13,6 +13,7 @@ namespace ThucHanh.Models
 
         public DbSet<Course> Coure { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Attendence> Attendences { get; set; }
 
         public ApplicationDbContext()
             : base("DefaultConnection", throwIfV1Schema: false)
@@ -24,6 +25,15 @@ namespace ThucHanh.Models
         {
             return new ApplicationDbContext();
         }
-    
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Attendence>()
+                .HasRequired(a => a.Course)
+                .WithMany()
+                .WillCascadeOnDelete(false);
+            base.OnModelCreating(modelBuilder);
+        }
+
     }
 }

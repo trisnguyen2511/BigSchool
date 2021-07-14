@@ -40,13 +40,14 @@
                 <div class="details">
                     <span class="lecturer">
                         @course.Lecture.Name
+                        <button class="btn btn-default btn-sm js-toggle-follow" data-user-id ="@course.LectureID" >Follow</button>
                     </span>
                     <span class="category">
                         @course.Category.Name
                     </span>
-                    @*<span>
+                    <span>
                             <button data-course-id="@course.Id" class ="btn btn-default btn-sm js-toggle-attendance" >Going</button>
-                        </span>*@
+                        </span>
                 </div>
             </li>
         }
@@ -56,14 +57,15 @@
 
 <script src="~/Content/Site.css"></script>
 
-@*@section scripts
-<script>
+@section scripts
+{
+    <script>
     $(document).ready(function () {
         $(".js-toggle-attendance").click(function (e) {
             var button = $(e.target);
             $.post("/api/Attendances", { courseId: button.attr("data-course-id") })
                 .done(function () {
-                    button-
+                    button
                         .removeClass("btn-default")
                         .addClass("btn-info")
                         .text("Going")
@@ -71,7 +73,18 @@
                 .fail(function () {
                     alert("Sthing Failed");
                 })
-
         });
-    });
-</script>*@
+
+        $(".js-toggle-follow").click(function (e) {
+            var button = $(e.target);
+            $.post("/api/followings", { followeeid: button.attr("data-user-id") })
+                .done(function () {
+                    button.text("Following");
+                })
+                .fail(function () {
+                    alert("Something failed");
+                })
+            })
+        });
+    </script>
+}

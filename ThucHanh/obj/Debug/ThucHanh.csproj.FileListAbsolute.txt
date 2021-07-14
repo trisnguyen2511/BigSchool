@@ -239,3 +239,4 @@ E:\CoronaStudy\Thực hành lập trình web\BigSchool\BigSchool\ThucHanh\bin\Sy
 E:\CoronaStudy\Thực hành lập trình web\BigSchool\BigSchool\ThucHanh\bin\System.Net.Http.Formatting.xml
 E:\CoronaStudy\Thực hành lập trình web\BigSchool\BigSchool\ThucHanh\bin\System.Web.Http.xml
 E:\CoronaStudy\Thực hành lập trình web\BigSchool\BigSchool\ThucHanh\bin\System.Web.Http.WebHost.xml
+E:\CoronaStudy\Thực hành lập trình web\BigSchool\BigSchool\ThucHanh\obj\Debug\ThucHanh.Migrations.AddFollowingsTable.resources

@@ -1,0 +1,45 @@
+﻿@model ThucHanh.ViewModels.CoursesViewModel
+@{
+    ViewBag.Title = "Attending";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Attending</h2>
+
+<ul class="course">
+    @foreach (var course in Model.UpcommingCourses)
+    {
+        <li>
+            <div class="date">
+                <div class="month">
+                    @course.datetime.ToString("MM")
+                </div>
+                <div class="day">
+                    @course.datetime.ToString("dd")
+                </div>
+            </div>
+            <div class="details">
+                <span class="lecturer">
+                    @course.Lecture.Name
+                    @if (Model.ShowAction)
+                    {
+                        <button class="btn btn-default btn-sm js-toggle-follow" data-user-id="@course.LectureID">Follow</button>
+                    }
+
+                </span>
+                <br />
+                <span class="category">
+                    @course.Category.Name
+                </span>
+                <span>
+                    @if (Model.ShowAction)
+                    {
+                        <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going</button>
+                    }
+                </span>
+            </div>
+        </li>
+    }
+</ul>
+
+<script src="~/Content/Site.css"></script>

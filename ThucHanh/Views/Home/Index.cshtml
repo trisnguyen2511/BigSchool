@@ -1,4 +1,5 @@
-﻿@model IEnumerable<ThucHanh.Models.Course>
+﻿
+@model ThucHanh.ViewModels.CoursesViewModel
 @{
     ViewBag.Title = "Home Page";
 }
@@ -26,7 +27,7 @@
             <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
         </div>*@
     <ul class="course">
-        @foreach (var course in Model)
+        @foreach (var course in Model.UpcommingCourses)
         {
             <li>
                 <div class="date">
@@ -40,14 +41,22 @@
                 <div class="details">
                     <span class="lecturer">
                         @course.Lecture.Name
-                        <button class="btn btn-default btn-sm js-toggle-follow" data-user-id ="@course.LectureID" >Follow</button>
+                        @if (Model.ShowAction)
+                        {
+                            <button class="btn btn-default btn-sm js-toggle-follow" data-user-id="@course.LectureID">Follow</button>
+                        }
+
                     </span>
+                    <br />
                     <span class="category">
                         @course.Category.Name
                     </span>
                     <span>
-                            <button data-course-id="@course.Id" class ="btn btn-default btn-sm js-toggle-attendance" >Going</button>
-                        </span>
+                        @if (Model.ShowAction)
+                        {
+                            <button data-course-id="@course.Id" class="btn btn-default btn-sm js-toggle-attendance">Going</button>
+                        }
+                    </span>
                 </div>
             </li>
         }
@@ -60,30 +69,30 @@
 @section scripts
 {
     <script>
-    $(document).ready(function () {
-        $(".js-toggle-attendance").click(function (e) {
-            var button = $(e.target);
-            $.post("/api/Attendances", { courseId: button.attr("data-course-id") })
-                .done(function () {
-                    button
-                        .removeClass("btn-default")
-                        .addClass("btn-info")
-                        .text("Going")
-                })
-                .fail(function () {
-                    alert("Sthing Failed");
-                })
-        });
+        $(document).ready(function () {
+            $(".js-toggle-attendance").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/Attendances", { courseId: button.attr("data-course-id") })
+                    .done(function () {
+                        button
+                            .removeClass("btn-default")
+                            .addClass("btn-info")
+                            .text("Going")
+                    })
+                    .fail(function () {
+                        alert("Sthing Failed");
+                    })
+            });
 
-        $(".js-toggle-follow").click(function (e) {
-            var button = $(e.target);
-            $.post("/api/followings", { followeeid: button.attr("data-user-id") })
-                .done(function () {
-                    button.text("Following");
-                })
-                .fail(function () {
-                    alert("Something failed");
-                })
+            $(".js-toggle-follow").click(function (e) {
+                var button = $(e.target);
+                $.post("/api/followings", { followeeid: button.attr("data-user-id") })
+                    .done(function () {
+                        button.text("Following");
+                    })
+                    .fail(function () {
+                        alert("Something failed");
+                    })
             })
         });
     </script>

@@ -26,7 +26,8 @@ namespace ThucHanh.Controllers
         {
             var viewModel = new CourseViewModel
             {
-                Categories = _dbContext.Categories.ToList()
+                Categories = _dbContext.Categories.ToList(),
+                Heading = "Add Course"
             };
             return View(viewModel);
         }
@@ -50,7 +51,7 @@ namespace ThucHanh.Controllers
             };
             _dbContext.Coure.Add(course);
             _dbContext.SaveChanges();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Mine", "Courses");
         }
 
 
@@ -63,6 +64,7 @@ namespace ThucHanh.Controllers
                 .Select(a => a.Course)
                 .Include(l => l.Lecture)
                 .Include(l => l.Category)
+                .Where(k => k.IsCanceled == false)
                 .ToList();
 
             var viewModel = new CoursesViewModel
@@ -73,6 +75,56 @@ namespace ThucHanh.Controllers
             return View(viewModel);
         }
 
+        public ActionResult Mine()
+        {
+            var userId = User.Identity.GetUserId();
+            var courses = _dbContext.Coure
+                .Where(c => c.LectureID == userId && c.datetime > DateTime.Now && c.IsCanceled == false)
+                .Include(l => l.Lecture).Include(c => c.Category).ToList();
+            return View(courses);
+        }
+
+
+        [Authorize]
+        public ActionResult Edit(int id)
+        {
+            var userId = User.Identity.GetUserId();
+            var course = _dbContext.Coure.Single(c => c.Id == id && c.LectureID == userId);
+
+            var viewModel = new CourseViewModel
+            {
+                Categories = _dbContext.Categories.ToList(),
+                Date = course.datetime.ToString("dd/M/yyyy"),
+                Time = course.datetime.ToString("HH:mm"),
+                Category = course.CategoryId,
+                Place = course.Place,
+                Heading = "Edit Course",
+                Id = course.Id
+            };
+            return View("Create", viewModel);
+        }
+
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Update (CourseViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.Categories = _dbContext.Categories.ToList();
+                return View("Create", viewModel);
+            }
+            var userId = User.Identity.GetUserId();
+            var course = _dbContext.Coure.Single(c => c.Id == viewModel.Id && c.LectureID == userId );
+
+            course.Place = viewModel.Place;
+            course.datetime = viewModel.GetDateTime();
+            course.CategoryId = viewModel.Category;
+
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }
